@@ -14,6 +14,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
 import com.pravera.flutter_foreground_task.models.*
 import com.pravera.flutter_foreground_task.utils.ForegroundServiceUtils
 import io.flutter.FlutterInjector
@@ -200,15 +201,12 @@ class ForegroundService : Service(), MethodChannel.MethodCallHandler {
 
         val id = notificationOptions.id
         val notification = createNotification()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(
-                id,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-            )
-        } else {
-            startForeground(id, notification)
-        }
+
+        ServiceCompat.startForeground(this,
+            id,
+            notification,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+        )
 
         releaseLockMode()
         acquireLockMode()
